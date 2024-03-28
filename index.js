@@ -48,7 +48,7 @@ const ExtractJwt = require('passport-jwt').ExtractJwt;
 
 const jwtOptions = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: 'rohit2GSSA43FYE!@fafaf5n3535n325nm' // Change this to a secure secret
+    secretOrKey: 'rohit13807!@fafaf5n3535n325nm' // Change this to a secure secret
 };
 
 passport.use(new JwtStrategy(jwtOptions, (payload, done) => {
@@ -61,12 +61,9 @@ passport.use(new JwtStrategy(jwtOptions, (payload, done) => {
     }
 }));
 
-// Routes
+// Routes.. save the user detail in array.
 app.post('/register', (req, res) => {
     const { username, password } = req.body;
-    console.log('User name: ', username);
-    console.log('Pass word: ', password);
-
     const hashedPassword = bcrypt.hashSync(password, 10);
     const newUser = new User(users.length + 1, username, hashedPassword);
     users.push(newUser);
@@ -76,10 +73,6 @@ app.post('/register', (req, res) => {
 app.post('/login', passport.authenticate('local', { session: false }), (req, res) => {
     const token = jwt.sign({ sub: req.user.id }, jwtOptions.secretOrKey);
     res.json({ token });
-});
-
-app.get('/protected', passport.authenticate('jwt', { session: false }), (req, res) => {
-    res.json({ message: 'Protected route accessed successfully' });
 });
 
 // Start server
